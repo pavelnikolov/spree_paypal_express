@@ -165,7 +165,8 @@ module Spree
           Rails.logger.error ppx_auth_response.to_yaml
         end
 
-        @order.update_attributes({:state => "complete", :completed_at => Time.now}, :without_protection => true)
+        @order.next
+        @order.update_attributes({:state => "complete", :completed_at => Time.now}, :without_protection => true) unless @order.state?(:complete)
 
         # Unset the order id as it's completed.
         session[:order_id] = nil
